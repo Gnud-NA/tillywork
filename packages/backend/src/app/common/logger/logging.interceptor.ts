@@ -8,10 +8,13 @@ import {
 import { FastifyRequest, FastifyReply } from "fastify";
 import { Observable } from "rxjs";
 import { from } from "rxjs";
+import { CustomLogger } from "./customLogger";
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
     private logger = new Logger("HTTP");
+
+    private customLogger = new CustomLogger();
 
     intercept(
         context: ExecutionContext,
@@ -30,7 +33,7 @@ export class LoggingInterceptor implements NestInterceptor {
             }
         }
 
-        this.logger.log(`${request.id} - ${request.method} ${request.url}`);
+        this.customLogger.logInfo(request);
 
         return next
             .handle()
